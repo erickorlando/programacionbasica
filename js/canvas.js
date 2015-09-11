@@ -24,8 +24,16 @@ function dibujarCirculo()
 function limpiarGrilla()
 {
     lienzo.clearRect(0,0,300,300);
-    dibujarCirculo();
-    
+    //dibujarCirculo();
+    dibujarBola();
+}
+function dibujarBola()
+{
+    lienzo.beginPath();
+    lienzo.strokeStyle = "#00AABB";
+    lienzo.arc(50,50,100,(Math.PI*2), false);
+    lienzo.closePath();
+    lienzo.stroke();
 }
 function dibujarGrilla () 
 {

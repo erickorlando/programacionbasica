@@ -12,7 +12,7 @@ function inicio()
     t = document.getElementById("alejandra");
     b = document.getElementById("botoncito");
 
-    b.addEventListener("click", calcular);
+  //  b.addEventListener("click", calcular);
 
 
     // var residuo;
@@ -45,8 +45,8 @@ function calcular()
 </head>
 <body>
     <input type="text" id="alejandra" />
-    <input type="button" id="botoncito" value="Tocame~" />
-    <div id="caja">Nada</div>
+    <input type="button" id="botoncito" value="Tocame~" onclick="calcular();" />
+    <div id="caja"></div>
     <div>Otra caja</div>
     <script type="text/javascript">
     inicio();
