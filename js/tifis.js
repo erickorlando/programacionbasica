@@ -5,7 +5,7 @@ var fondo = {
 };
 
 var tifis = {
-    x: 200,
+    x: 100,
     y: 100,
     frenteURL: "Images/diana-frente.png",
     frenteOK: false
@@ -18,9 +18,21 @@ function juegoCanvasInicio() {
     fondo.imagen = new Image();
     fondo.imagen.src = fondo.imagenURL;
     fondo.imagen.onload = confirmarFondo;
+    
+    tifis.frente = new Image();
+    tifis.frente.src = tifis.frenteURL;
+    tifis.frente.onload = confirmarFrente;
+    
+    var m = document.getElementById("mover");
+    m.addEventListener("click",movimiento);
 }
 function confirmarFondo(){
     fondo.imagenOK = true;
+    dibujar();
+}
+function confirmarFrente()
+{
+    tifis.frenteOK = true;
     dibujar();
 }
 function dibujar(){
@@ -28,4 +40,13 @@ function dibujar(){
     {
         tablero.drawImage(fondo.imagen,0,0);
     }
+    if (tifis.frenteOK == true)
+    {
+        tablero.drawImage(tifis.frente,tifis.x,tifis.y);
+    }
+}
+function movimiento()
+{
+    tifis.x += 10;
+    dibujar();    
 }
