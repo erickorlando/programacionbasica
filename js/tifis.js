@@ -1,4 +1,22 @@
+/*
+x=0,50,100
+y=200,200,200
+
+x=200,200,200,200,200
+y=0,50,100,150,200
+
+x=150,200,250,300,350,400,450
+y=350,350,350,350,350,350,350
+*/
 var tablero;
+var limites = {
+    tabla01: [[0, 50, 100,
+              200,200,200]],
+    tabla02: [[200, 200, 200, 200, 200],
+              [0  , 50 , 100, 150, 200]],
+    tabla03: [[150, 200, 250, 300, 350, 400, 450],
+              [350, 350, 350, 350, 350, 350, 350]]
+};
 var teclas =
     {
         UP: 38,
@@ -14,8 +32,8 @@ var fondo = {
 };
 
 var tifis = {
-    x: 100,
-    y: 100,
+    x: 0,
+    y: 0,
     frente: new Image(),
     frenteURL: "Images/diana-frente.png",
     frenteOK: false,
@@ -28,8 +46,8 @@ var tifis = {
     izq: new Image(),
     izqURL: "Images/diana-izq.png",
     izqOK: false,
-    velocidad: 20
-}
+    velocidad: 50
+};
 
 var liz = {
     x: 100,
@@ -37,7 +55,7 @@ var liz = {
     imagenOK: false,
     imagen: new Image(),
     imagenURL: "Images/liz.png"
-}
+};
 
 function juegoCanvasInicio() {
     var canvas = document.getElementById("campo");
@@ -88,16 +106,38 @@ function teclado(datos) {
     switch (codigo) {
         case teclas.UP:
             tifis.y -= tifis.velocidad;
+            if (tifis.y < 0)
+                tifis.y = 0;
             break;
         case teclas.DOWN:
             tifis.y += tifis.velocidad;
+            if (tifis.y >= 500)
+                tifis.y = 450;
             break;
         case teclas.LEFT:
             tifis.x -= tifis.velocidad;
+            if (tifis.x < 0)
+                tifis.x = 0;
             break;
         case teclas.RIGHT:
             tifis.x += tifis.velocidad;
+            if (tifis.x >= 500)
+                tifis.x = 450;
             break;
+    }
+    
+    
+    // Comprobamos que Diana no esté dentro de los límites.
+    // Creamos un array con la coordenada;
+    var posicion = [tifis.x, tifis.y];
+    console.log(limites.tabla01.indexOf(posicion));
+    
+    if (limites.tabla01.indexOf(posicion) > 1) 
+    {
+        // tifis.x -= 50;
+        // tifis.y -= 50;
+        console.log('Posicion X => ' + tifis.x + ' Posicion Y ' + tifis.y);
+        console.log('Dentro de los límites de la tabla01!');
     }
 
     dibujar(codigo);
@@ -105,7 +145,7 @@ function teclado(datos) {
 
 
 function dibujar(direccion) {
-    if (fondo.imagenOK == true) {
+    if (fondo.imagenOK) {
         tablero.drawImage(fondo.imagen, 0, 0);
     }
     var posicionTifis = tifis.frente;
@@ -129,8 +169,4 @@ function dibujar(direccion) {
     if (liz.imagenOK) {
         tablero.drawImage(liz.imagen, liz.x, liz.y);
     }
-}
-function movimiento() {
-    tifis.x += 10;
-    dibujar();
 }
