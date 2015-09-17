@@ -1,22 +1,19 @@
-/*
-x=0,50,100
-y=200,200,200
-
-x=200,200,200,200,200
-y=0,50,100,150,200
-
-x=150,200,250,300,350,400,450
-y=350,350,350,350,350,350,350
-*/
 var tablero;
-var limites = {
-    tabla01: [[0, 50, 100,
-              200,200,200]],
-    tabla02: [[200, 200, 200, 200, 200],
-              [0  , 50 , 100, 150, 200]],
-    tabla03: [[150, 200, 250, 300, 350, 400, 450],
-              [350, 350, 350, 350, 350, 350, 350]]
-};
+var limites = [{x : 0, y: 200}, 
+              {x: 50, y: 200}, 
+              {x: 100, y: 200},
+              {x: 200, y: 0},
+              {x: 200, y: 50},
+              {x: 200, y:100},
+              {x: 200, y:150},
+              {x: 200, y:200},
+              {x: 150, y:350},
+              {x: 200, y:350},
+              {x: 250, y:350},
+              {x: 300, y:350},
+              {x: 350, y:350},
+              {x: 400, y:350},
+              {x: 450, y:350}];
 var teclas =
     {
         UP: 38,
@@ -50,8 +47,8 @@ var tifis = {
 };
 
 var liz = {
-    x: 100,
-    y: 250,
+    x: 450,
+    y: 450,
     imagenOK: false,
     imagen: new Image(),
     imagenURL: "Images/liz.png"
@@ -81,7 +78,7 @@ function juegoCanvasInicio() {
     tifis.izq.src = tifis.izqURL;
     tifis.izq.onload = function () {
         tifis.izqOK = true;
-        dibujar();
+        dibujar(undefined);
     };
     tifis.der.src = tifis.derURL;
     tifis.der.onload = function () {
@@ -102,7 +99,10 @@ function juegoCanvasInicio() {
 function teclado(datos) {
     // Guardo el numero de la tecla oprimida.
     var codigo = datos.keyCode;
-
+    // Guardamos la posición anterior de Diana.
+    var anteriorX = tifis.x;
+    var anteriorY = tifis.y;
+    
     switch (codigo) {
         case teclas.UP:
             tifis.y -= tifis.velocidad;
@@ -127,18 +127,21 @@ function teclado(datos) {
     }
     
     
-    // Comprobamos que Diana no esté dentro de los límites.
-    // Creamos un array con la coordenada;
-    var posicion = [tifis.x, tifis.y];
-    console.log(limites.tabla01.indexOf(posicion));
-    
-    if (limites.tabla01.indexOf(posicion) > 1) 
+    // Comprobamos que Diana no esté dentro de los límites
+    // de la zona donde se ubica la madera.
+    // Con la función Map podremos buscar valores dentro de un
+    // array multidimensional.
+    limites.map(function (pos)
     {
-        // tifis.x -= 50;
-        // tifis.y -= 50;
-        console.log('Posicion X => ' + tifis.x + ' Posicion Y ' + tifis.y);
-        console.log('Dentro de los límites de la tabla01!');
-    }
+       // Si se encuentra dentro de laz zonas de madera.
+       if (pos.x == tifis.x && pos.y == tifis.y)
+       {
+           // Reestablecemos los valores anteriores
+           // como si Diana no se hubiese movido.
+           tifis.x = anteriorX;
+           tifis.y = anteriorY;
+       }
+    });
 
     dibujar(codigo);
 }
