@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Objetos</title>
+	<script type="text/javascript">
+	
+	var Mascota = function (n,v){
+		this.nombre = n;
+		this.voz = v;
+	}
+	Mascota.prototype.hablar = function()
+	{
+		console.log(this.nombre + " dice: " + this.voz);
+	}
+	var perro = new Mascota("Chucho","Guau!");
+	var gato = new Mascota("Michuno","Meao");
+	
+	perro.hablar();
+	gato.hablar();
+	</script>
+</head>
+
+<body>
+	<h1>Perros y gatos</h1>
+</body>
+
+</html>
