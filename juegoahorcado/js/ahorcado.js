@@ -1,5 +1,8 @@
-var palabra = "Tamarindo";
-var hombre;
+var palabras = ["Tamarindo", "aguja", "Jaguar", "Facebook", "Platzi", "Madera", "Programacion"];
+
+var palabra = "";
+var letra, boton;
+var hombre, espacio;
 var Ahorcado = function (con) {
 	this.contexto = con;
 	this.maximo = 5;
@@ -75,7 +78,7 @@ Ahorcado.prototype.dibujar = function () {
 						dibujo.lineTo(175, 145);
 						dibujo.moveTo(175, 120);
 						dibujo.lineTo(155, 145);
-						
+
 						dibujo.strokeStyle = "blue";
 						dibujo.lineWidth = 5;
 						dibujo.stroke();
@@ -89,8 +92,7 @@ Ahorcado.prototype.dibujar = function () {
 }
 Ahorcado.prototype.trazar = function () {
 	this.intentos++;
-	if (this.intentos >= this.maximo)
-	{
+	if (this.intentos >= this.maximo) {
 		this.vivo = false;
 		alert("!Estás muerto!");
 	}
@@ -98,9 +100,78 @@ Ahorcado.prototype.trazar = function () {
 }
 
 function iniciar() {
+	letra = document.getElementById("letra");
+	boton = document.getElementById("boton");
+	var nuevo = document.getElementById("btnNuevo");
+	palabra = palabras[randomizar(0, (palabras.length - 1))];
+
 	var canvas = document.getElementById("c");
 	canvas.width = 500;
 	canvas.height = 400;
+
 	var contexto = canvas.getContext("2d");
 	hombre = new Ahorcado(contexto);
+
+	palabra = palabra.toUpperCase();
+	espacio = new Array(palabra.length);
+
+	boton.addEventListener("click", agregarLetra);
+	nuevo.addEventListener("click", function (){
+		iniciar();
+		letra.focus();
+	});
+	letra.addEventListener("keydown", function (key) {
+		if (key.keyCode == 13) {
+			boton.click();
+		}
+	});
+
+	mostrarPista(espacio);
+}
+function mostrarPista(espacio) {
+	var pista = document.getElementById("pista");
+	var texto = "";
+	var i = 0;
+	var largo = espacio.length;
+
+	for (i = 0; i < largo; i++) {
+		if (espacio[i] == undefined) {
+			texto += "_ ";
+		}
+		else
+			texto = texto + espacio[i] + " ";
+	}
+	pista.innerText = texto;
+	// Ahora buscamos si toda la palabra está completa.
+	if (texto.indexOf("_") == -1 && hombre.vivo) {
+		alert('Ganaste!');
+		boton.enabled = false;
+	}
+}
+function agregarLetra() {
+	var valorLetra = letra.value.toUpperCase();
+	letra.value = "";
+	letra.focus();
+	mostrarPalabra(palabra, hombre, valorLetra);
+}
+function mostrarPalabra(palabra, ahorcado, letra) {
+	var encontrado = false;
+	var p = "";
+	for (p in palabra) {
+		if (letra == palabra[p]) {
+			espacio[p] = letra;
+			encontrado = true;
+		}
+	}
+
+	mostrarPista(espacio);
+	if (!encontrado) {
+		ahorcado.trazar();
+	}
+	if (!ahorcado.vivo) {
+		mostrarPista(palabra);
+	}
+}
+function randomizar(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) + min);
 }
